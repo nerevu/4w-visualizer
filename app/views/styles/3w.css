@@ -54,3 +54,15 @@ body {
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
 }
+
+.rangeslider--vertical {
+  min-height: 300px;
+}
+
+.rangeslider__fill {
+ background: #bdd7e7;
+}
+
+.rangeslider, input[type='range'] {
+  max-width: 400px;
+}

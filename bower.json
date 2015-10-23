@@ -21,7 +21,8 @@
     "Backbone.dualStorage": "~1.4",
     "store2": "~2.2",
     "dcjs": "~2.0",
-    "colorbrewer": "~1.0.0"
+    "colorbrewer": "~1.0.0",
+    "rangeslider.js": "~2.0.2"
   },
   "devDependencies": {
     "chai": "~1.9.1",

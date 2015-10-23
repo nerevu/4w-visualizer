@@ -1,12 +1,29 @@
-<div class="col-md-4 col-sm-6 col-xs-12" id="three-w-who">
-  <strong>Who (Top {{ top }})</strong><span class="reset" style="display: none;">: <span class="filter">
+<div class="col-md-1 col-sm-2" id="three-w-when">
+  <strong>When</strong>
+  <p id="value">value<p>
+  <input
+    class="hidden-xs"
+    type="range"
+    min="1"
+    max="31"
+    step="1"
+    value="1"
+    data-orientation="vertical"
+  >
+  {{!-- <input class="visible-xs" type="range"> --}}
 </div>
-<div class="col-md-4 col-sm-6 col-xs-12" id="three-w-what">
-  <strong>What (Top {{ top }})</strong><span class="reset" style="display: none;">: <span class="filter">
+<div class="col-md-11 col-sm-10">
+  <div class="row">
+    <div class="col-md-4 col-sm-6" id="three-w-who">
+      <strong>Who (Top {{ top }})</strong><span class="reset" style="display: none;">: <span class="filter">
+    </div>
+    <div class="col-md-4 col-sm-6" id="three-w-what">
+      <strong>What (Top {{ top }})</strong><span class="reset" style="display: none;">: <span class="filter">
+    </div>
+    <div class="col-md-4 col-sm-12">
+      <strong>Where</strong>
+      {{!-- <span id="three-w-count">: <span> --}}
+      <div id="three-w-where"></div>
+    </div>
+  </div>
 </div>
-<div class="col-md-4 col-sm-12 col-xs-12">
-  <strong>Where (All)</strong><span id="three-w-count">: <span>
-  <div id="three-w-where"></div>
-</div>
-
-

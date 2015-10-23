@@ -23,7 +23,9 @@ module.exports = class MainView extends View
 
   render: =>
     super
-    _.defer @threew.drawCharts
+    _.defer =>
+      @threew.drawCharts()
+      @threew.initSlider()
 
   getViewSize: =>
     for size in ['lg', 'md', 'sm', 'xs']

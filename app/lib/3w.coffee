@@ -12,6 +12,7 @@ module.exports = class ThreeW
     @whatSelector = selection + '-what'
     @whereSelector = selection + '-where'
     @countSelector = selection + '-count'
+    @sliderSelector = selection + '-slider'
     @whoField = options.whoField or 'Organization'
     @whatField = options.whatField or 'Activity'
     @whereField = options.whereField or 'Location'
@@ -151,11 +152,26 @@ module.exports = class ThreeW
       .duration(750)
       .attr("transform", "scale(#{scale})translate(#{translate})")
 
-  slider: ->
-    # https://github.com/MasterMaps/d3-slider
-    # http://tipstrategies.com/geography-of-jobs/
-    # https://github.com/rgdonohue/d3-animated-world/blob/master/js/main.js
-    s = d3.slider().axis(true).min(2000).max(2100).step(5)
+  updateCharts: (chart, filter) ->
+    dc.filterAll()
+    chart.filter [filter]
+    dc.redrawAll()
 
-    s.on 'slide', (e, value) ->
-      d3.select('#slider3text').text(value)
+  updateHandle: (e, value) ->
+    m = moment new Date("5/#{value}/2015")
+    e.textContent = m.format("l")
+
+  initSlider: =>
+    whos_who = _.pluck @whoChart.group().top(10), 'key'
+    $element = $('input[type="range"]')
+    $handle = $('#value')[0]
+    updateHandle = @updateHandle
+
+    $element.rangeslider(
+      polyfill: false
+      onInit: -> updateHandle $handle, @value
+      onSlide: (pos, value) ->
+        updateHandle $handle, value
+      onSlideEnd: (pos, value) =>
+        @updateCharts @whoChart, _.sample(whos_who, 2)
+    )
