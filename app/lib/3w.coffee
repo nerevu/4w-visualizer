@@ -21,7 +21,7 @@ module.exports = class ThreeW
     @height = options.height or 350
     @colors = colorbrewer[colorScheme][numColors]
 
-  calcProjection: (projection, width, height) =>
+  calcProjection: (projection, width) =>
     # http://stackoverflow.com/a/14691788/408556
     path = d3.geo.path().projection(projection)
     b = path.bounds(@geom)
@@ -29,12 +29,12 @@ module.exports = class ThreeW
     bwidth = Math.abs(b[1][0] - b[0][0] )
     s = .9 / Math.max(bwidth / width, bheight / @height)
     t0 = (width - s * (b[1][0] + b[0][0])) / 2
-    t1 = (height - s * (b[1][1] + b[0][1])) / 2
+    t1 = (@height - s * (b[1][1] + b[0][1])) / 2
 
     result =
       scale: s
       width: (width - s * (b[1][0] + b[0][0])) / 2
-      height: (height - s * (b[1][1] + b[0][1])) / 2
+      height: (@height - s * (b[1][1] + b[0][1])) / 2
 
     result
 
@@ -95,7 +95,7 @@ module.exports = class ThreeW
       .ticks(5)
 
     projection = d3.geo.mercator().scale(1).translate([0, 0])
-    r = @calcProjection projection, whereWidth, @height
+    r = @calcProjection projection, whereWidth
     @projection = projection.scale(r.scale).translate([r.width, r.height])
 
     @whereChart
@@ -142,7 +142,7 @@ module.exports = class ThreeW
     @whatChart.width $(@whatSelector).width()
     dc.redrawAll()
 
-    r = @calcProjection @projection, $(@whereSelector).width(), @height
+    r = @calcProjection @projection, $(@whereSelector).width()
     scale = r.scale
     translate = "#{r.width}, #{r.height}"
 
