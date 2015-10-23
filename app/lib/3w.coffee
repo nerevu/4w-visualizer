@@ -1,3 +1,5 @@
+mediator = require 'mediator'
+
 module.exports = class ThreeW
   constructor: (options) ->
     # required
@@ -157,21 +159,45 @@ module.exports = class ThreeW
     chart.filter [filter]
     dc.redrawAll()
 
-  updateHandle: (e, value) ->
+  updateHandle: (e, value) =>
     m = moment new Date("5/#{value}/2015")
     e.textContent = m.format("l")
+    @value = value
 
   initSlider: =>
-    whos_who = _.pluck @whoChart.group().top(10), 'key'
-    $element = $('input[type="range"]')
+    # tipstrategies.com/geography-of-jobs/
+    # github.com/rgdonohue/d3-animated-world/blob/master/js/main.js
+    @whos_who = _.pluck @whoChart.group().top(10), 'key'
+    @paused = false
+    @start = 20
+    @max = 31
+    @$element = $('input[type="range"]')
     $handle = $('#value')[0]
     updateHandle = @updateHandle
 
-    $element.rangeslider(
+    @$element.rangeslider(
       polyfill: false
       onInit: -> updateHandle $handle, @value
       onSlide: (pos, value) ->
         updateHandle $handle, value
+
       onSlideEnd: (pos, value) =>
-        @updateCharts @whoChart, _.sample(whos_who, 2)
+        @updateCharts @whoChart, _.sample(@whos_who, 2)
     )
+
+  play: (value) =>
+    if (value <= @max) and not @paused
+      @$element.val(value).change()
+      @updateCharts @whoChart, _.sample(@whos_who, 2)
+      setTimeout (=> @play(value + 1)), 500
+    else if @paused
+      @paused = false
+    else if value > @max
+      console.log 'done'
+      mediator.publish 'done'
+
+  pause: => @paused = true
+  reset: =>
+    console.log 'really reset!'
+    @$element.val(@start).change()
+    @updateCharts @whoChart, _.sample(@whos_who, 2)

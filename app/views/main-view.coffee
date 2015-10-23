@@ -20,6 +20,9 @@ module.exports = class MainView extends View
     @size = @getViewSize()
     @threew = new ThreeW @options
     _.debounce $(window).on('resize', @resize), 75
+    @delegate 'click', '#play', @play
+    @delegate 'click', '#pause', @pause
+    @subscribeEvent 'done', @reset
 
   render: =>
     super
@@ -27,7 +30,25 @@ module.exports = class MainView extends View
       @threew.drawCharts()
       @threew.initSlider()
 
-  getViewSize: =>
+  play: =>
+    console.log 'playing!'
+    @threew.play @threew.value
+    $('#play').addClass('hide')
+    $('#pause').removeClass('hide')
+
+  pause: =>
+    console.log 'paused!'
+    @threew.pause()
+    $('#play').removeClass('hide')
+    $('#pause').addClass('hide')
+
+  reset: ->
+    console.log 'reset!'
+    @threew.reset()
+    $('#play').removeClass('hide')
+    $('#pause').addClass('hide')
+
+  getViewSize: ->
     for size in ['lg', 'md', 'sm', 'xs']
       if $(".device-#{size}").is(':visible')
         return size

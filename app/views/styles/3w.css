@@ -55,12 +55,13 @@ body {
   border-radius: 5px;
 }
 
-.rangeslider--vertical {
-  min-height: 300px;
+.rangeslider__fill {
+  background: #bdd7e7;
 }
 
-.rangeslider__fill {
- background: #bdd7e7;
+.rangeslider--vertical {
+  min-height: 246px;
+  margin-left: 10px;
 }
 
 .rangeslider, input[type='range'] {
