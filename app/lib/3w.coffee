@@ -126,7 +126,6 @@ module.exports = class ThreeW
     #     none:'zero districts')
 
     dc.renderAll()
-
     g = d3.selectAll(@whoSelector).select('svg').append('g')
 
     g.append('text')
@@ -174,7 +173,6 @@ module.exports = class ThreeW
   initSlider: =>
     # tipstrategies.com/geography-of-jobs/
     # github.com/rgdonohue/d3-animated-world/blob/master/js/main.js
-
     @paused = false
     @baseDate = moment new Date '1/1/1970'
     @min = moment(@firstDate).diff(@baseDate, 'days')

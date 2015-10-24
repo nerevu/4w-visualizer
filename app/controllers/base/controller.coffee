@@ -12,7 +12,7 @@ module.exports = class Controller extends Chaplin.Controller
   # You may also persist models etc.
   beforeAction: ->
     @reuse 'site', SiteView
-    @reuse 'site-footer', FooterView
+    @reuse 'footer', FooterView
     @reuse 'navbar', NavbarView
 
     author = config.author
