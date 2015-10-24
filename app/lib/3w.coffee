@@ -45,7 +45,7 @@ module.exports = class ThreeW
     keys = (f.properties[@joiner] for f in @geom.features)
     values = (f.properties[@namer] for f in @geom.features)
     lookup = _.object keys, values
-    margins = top: 0, left: 5, right: 10, bottom: 35
+    margins = top: 0, left: 10, right: 10, bottom: 35
     add = (p, v) -> v.size
     remove = (p, v) -> v.size
     init = -> 0
@@ -76,7 +76,7 @@ module.exports = class ThreeW
       .height(@height)
       .margins(margins)
       .elasticX(true)
-      .data((group) => group.top(@top))
+      .data((dimension) => dimension.top(@top))
       .labelOffsetY(13)
       .colors([@colors[1]])
       .colorAccessor((d, i) -> 0)
@@ -90,7 +90,7 @@ module.exports = class ThreeW
       .height(@height)
       .margins(margins)
       .elasticX(true)
-      .data((group) => group.top(@top))
+      .data((dimension) => dimension.top(@top))
       .labelOffsetY(13)
       .colors([@colors[1]])
       .colorAccessor((d, i) -> 0)
@@ -108,8 +108,9 @@ module.exports = class ThreeW
       .colors(@colors)
       .colorDomain(d3.extent(_.pluck(whereGroup.all(), 'value')))
       .colorCalculator((d) => if d then @whereChart.colors()(d) else '#ccc')
-      .overlayGeoJson(@geom.features, 'District', (d) => d.properties[@joiner])
-      .title((d) ->"District: #{lookup[d.key]}\nActivities: #{d.value or 0}")
+      .overlayGeoJson(@geom.features, 'County', (d) =>
+        d.properties[@joiner] or '')
+      .title((d) ->"County: #{lookup[d.key]}\nActivities: #{d.value or 0}")
 
     # @countChart
     #   .group({value: -> whereGroup.size()})

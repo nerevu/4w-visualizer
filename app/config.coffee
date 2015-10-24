@@ -1,11 +1,11 @@
-site_name = 'Nepal Shelter Cluster 3W'
+site_name = 'Kenya 4W'
 
 config =
-  whoField: 'Implementing agency'
-  whatField: 'Action description'
-  whereField: 'District HLCIT Code'
-  joinAttribute: 'HLCIT_CODE'
-  nameAttribute: 'DISTRICT'
+  whoField: 'Agency'
+  whatField: 'Project Title'
+  whereField: 'County'
+  joinAttribute: 'COUNTY_NAM'
+  nameAttribute: 'COUNTY_NAM'
   colorScheme: 'Blues'
 
   author:
