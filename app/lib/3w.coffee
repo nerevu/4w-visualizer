@@ -105,6 +105,7 @@ module.exports = class ThreeW
     r = @calcProjection projection, whereWidth
     @projection = projection.scale(r.scale).translate([r.width, r.height])
 
+    # TODO: fix filter display https://dc-js.github.io/dc.js/vc/index.html
     @whereChart
       .dimension(whereDimension)
       .projection(@projection)
