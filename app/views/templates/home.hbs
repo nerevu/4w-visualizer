@@ -1,36 +1,31 @@
-<div class="col-md-1 col-sm-2" id="three-w-when">
-  <strong>When</strong>
-  <p id="value">value</p>
-  <input
-    class="hidden-xs"
-    type="range"
-    min="1"
-    max="31"
-    step="1"
-    value="1"
-    data-orientation="vertical"
-  >
-  <br>
-  <button id="play" class="btn">
-    <i class="glyphicon glyphicon-play"></i>
-  </button>
-  <button id="pause" class="btn hide">
-    <i class="glyphicon glyphicon-pause"></i>
-  </button>
-  {{!-- <input class="visible-xs" type="range"> --}}
-</div>
-<div class="col-md-11 col-sm-10">
+<div class="col-md-12" id="three-w-when">
+  <h3>When (<span id="value"></span>)</h3>
   <div class="row">
-    <div class="col-md-4 col-sm-6" id="three-w-who">
-      <strong>Who (Top {{ top }})</strong><span class="reset" style="display: none;">: <span class="filter">
+    <div class="col-sm-1 col-xs-2">
+      <button class="btn play">
+        <i class="glyphicon glyphicon-play"></i>
+      </button>
+      <button class="btn hide pause">
+        <i class="glyphicon glyphicon-pause"></i>
+      </button>
     </div>
-    <div class="col-md-4 col-sm-6" id="three-w-what">
-      <strong>What (Top {{ top }})</strong><span class="reset" style="display: none;">: <span class="filter">
-    </div>
-    <div class="col-md-4 col-sm-12">
-      <strong>Where</strong>
-      {{!-- <span id="three-w-count">: <span> --}}
-      <div id="three-w-where"></div>
+    <div class="col-sm-11 col-xs-10">
+      <input class="slider" type="range" step="1">
     </div>
   </div>
+</div>
+<div class="col-md-8">
+  <div class="row">
+    <div class="col-sm-6 col-xs-12" id="three-w-who">
+      <h3>Who (Top {{ top }})</h3><span class="reset" style="display: none;"><span class="filter">
+    </div>
+    <div class="col-sm-6 col-xs-12" id="three-w-what">
+      <h3>What (Top {{ top }})</h3><span class="reset" style="display: none;"><span class="filter">
+    </div>
+  </div>
+</div>
+<div class="col-md-4">
+  <h3>Where</h3>
+  {{!-- <span id="three-w-count"><span> --}}
+  <div id="three-w-where"></div>
 </div>

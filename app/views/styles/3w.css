@@ -59,11 +59,21 @@ body {
   background: #bdd7e7;
 }
 
+.rangeslider--horizontal {
+  margin-top: 6px;
+}
+
 .rangeslider--vertical {
   min-height: 246px;
   margin-left: 10px;
 }
 
-.rangeslider, input[type='range'] {
-  max-width: 400px;
+/*  X-Small  */
+@media (max-width:767px){
+  .rangeslider, input[type='range'] {max-width: 250px;}
+}
+
+/*  Small  */
+@media (min-width:767px){
+  .rangeslider, input[type='range'] {max-width: 650px;}
 }

@@ -60,6 +60,10 @@ module.exports = class ThreeW
     whoDimension = cf.dimension (d) => d[@whoField]
     whatDimension = cf.dimension (d) => d[@whatField]
     whereDimension = cf.dimension (d) => d[@whereField]
+    @startDimension = cf.dimension (d) -> new Date d['Start']
+    @endDimension = cf.dimension (d) -> new Date d['End']
+    @firstDate = new Date @startDimension.bottom(1)[0].Start
+    @lastDate = new Date @endDimension.top(1)[0].End
 
     whoGroup = whoDimension.group()
     whatGroup = whatDimension.group()
@@ -155,50 +159,63 @@ module.exports = class ThreeW
       .duration(750)
       .attr("transform", "scale(#{scale})translate(#{translate})")
 
-  updateCharts: (chart, filter) ->
+  updateCharts: (value) =>
     dc.filterAll()
-    chart.filter [filter]
+    m = moment(@baseDate).add('days', value)
+    @startDimension.filterRange([@baseDate, (m.add('d', 1)).toDate()])
+    @endDimension.filterRange([m.toDate(), Infinity])
     dc.redrawAll()
 
-  updateHandle: (e, value) =>
-    m = moment new Date("5/#{value}/2015")
+  updateValue: (e, value) =>
+    m = moment(@baseDate).add('days', value)
     e.textContent = m.format("l")
     @value = value
 
   initSlider: =>
     # tipstrategies.com/geography-of-jobs/
     # github.com/rgdonohue/d3-animated-world/blob/master/js/main.js
-    @whos_who = _.pluck @whoChart.group().top(10), 'key'
+
     @paused = false
-    @start = 20
-    @max = 31
-    @$element = $('input[type="range"]')
-    $handle = $('#value')[0]
-    updateHandle = @updateHandle
+    @baseDate = moment new Date '1/1/1970'
+    @min = moment(@firstDate).diff(@baseDate, 'days')
+    @max = moment(@lastDate).diff(@baseDate, 'days')
+    @$element = $('.slider')
+
+    now = moment new Date()
+    start = now.diff(@baseDate, 'days')
+    count = $('.slider').length
+    $value = $('#value')[0]
+
+    updateValue = @updateValue
+    updateCharts = @updateCharts
+
+    @$element[0].setAttribute('min', @min)
+    @$element[0].setAttribute('max', @max)
+    @$element[0].setAttribute('value', start)
 
     @$element.rangeslider(
       polyfill: false
-      onInit: -> updateHandle $handle, @value
+      onInit: ->
+        updateValue $value, @value
+        updateCharts @value
       onSlide: (pos, value) ->
-        updateHandle $handle, value
-
-      onSlideEnd: (pos, value) =>
-        @updateCharts @whoChart, _.sample(@whos_who, 2)
+        if @grabPos
+          updateValue $value, value
+      onSlideEnd: (pos, value) => @updateCharts value
     )
 
   play: (value) =>
     if (value <= @max) and not @paused
       @$element.val(value).change()
-      @updateCharts @whoChart, _.sample(@whos_who, 2)
-      setTimeout (=> @play(value + 1)), 500
+      @updateCharts value
+      setTimeout (=> @play(value + 14)), 1000
     else if @paused
       @paused = false
     else if value > @max
-      console.log 'done'
       mediator.publish 'done'
 
   pause: => @paused = true
+
   reset: =>
-    console.log 'really reset!'
-    @$element.val(@start).change()
-    @updateCharts @whoChart, _.sample(@whos_who, 2)
+    @$element.val(@min).change()
+    @updateCharts @min

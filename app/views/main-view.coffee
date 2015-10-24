@@ -20,9 +20,10 @@ module.exports = class MainView extends View
     @size = @getViewSize()
     @threew = new ThreeW @options
     _.debounce $(window).on('resize', @resize), 75
-    @delegate 'click', '#play', @play
-    @delegate 'click', '#pause', @pause
+    @delegate 'click', '.play', @play
+    @delegate 'click', '.pause', @pause
     @subscribeEvent 'done', @reset
+    @firstPlay = true
 
   render: =>
     super
@@ -31,22 +32,20 @@ module.exports = class MainView extends View
       @threew.initSlider()
 
   play: =>
-    console.log 'playing!'
-    @threew.play @threew.value
-    $('#play').addClass('hide')
-    $('#pause').removeClass('hide')
+    @threew.play if @firstPlay then @threew.min else @threew.value
+    $('.play').addClass('hide')
+    $('.pause').removeClass('hide')
+    @firstPlay = false
 
   pause: =>
-    console.log 'paused!'
     @threew.pause()
-    $('#play').removeClass('hide')
-    $('#pause').addClass('hide')
+    $('.play').removeClass('hide')
+    $('.pause').addClass('hide')
 
   reset: ->
-    console.log 'reset!'
     @threew.reset()
-    $('#play').removeClass('hide')
-    $('#pause').addClass('hide')
+    $('.play').removeClass('hide')
+    $('.pause').addClass('hide')
 
   getViewSize: ->
     for size in ['lg', 'md', 'sm', 'xs']
