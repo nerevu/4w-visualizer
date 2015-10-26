@@ -6,7 +6,7 @@ config =
   whereField: 'County'
   joinAttribute: 'COUNTY_NAM'
   nameAttribute: 'COUNTY_NAM'
-  colorScheme: 'Blues'
+  colorScheme: 'Oranges'
 
   author:
     name: 'Reuben Cummings'

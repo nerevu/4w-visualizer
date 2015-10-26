@@ -1,3 +1,11 @@
+/* Colors */
+.active-nav {color: #fd8d3c !important;}
+.navbar-nav > li > a {color: #fd8d3c !important;}
+#intro .jumbotron {background-color: #fdbe85;}
+#intro p, #intro h2, #intro small {color: #f8f8f8;}
+a {color: #fd8d3c;}
+a:hover, a:focus {color: #a63603;}
+
 /* Site CSS */
 body {
   padding-top: 50px;

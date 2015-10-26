@@ -55,8 +55,9 @@ body {
   border-radius: 5px;
 }
 
+/* Slider */
 .rangeslider__fill {
-  background: #bdd7e7;
+  background: #fdbe85;
 }
 
 .rangeslider--horizontal {
