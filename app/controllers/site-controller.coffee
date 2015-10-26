@@ -7,7 +7,7 @@ mediator = require 'mediator'
 module.exports = class SiteController extends Controller
   initialize: (params) =>
     utils.log "initialize site-controller"
-    @title = config.site.home.title
+    @title = config.site.title
 
   getOptions: =>
     options =

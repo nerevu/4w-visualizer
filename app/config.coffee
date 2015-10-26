@@ -28,13 +28,6 @@ config =
       brunch, chaplin, nodejs, backbonejs, bower, html5, single page app
       """
 
-    # Web pages
-    home:
-      id: '3w'
-      page: '3w'
-      href: '/3w'
-      title: site_name
-
   google:
     analytics:
       id: $PROCESS_ENV_GOOGLE_ANALYTICS_TRACKING_ID ? null
