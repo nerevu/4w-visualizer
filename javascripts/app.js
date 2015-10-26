@@ -898,7 +898,8 @@ routes = require('routes');
 $(function() {
   return new Application({
     controllerSuffix: '-controller',
-    routes: routes
+    routes: routes,
+    pushState: false
   });
 });
 });
