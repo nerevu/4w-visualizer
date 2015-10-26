@@ -18,8 +18,9 @@ config =
     title: site_name
     description: 'Emergency Interventions by La Niña Consortium'
     sub_description: 'Who is Doing What Where and When'
-    url: 'https://data.hdx.rwlabs.org/organization/la-nina-consortium'
-    source: 'https://github.com/reubano/4w-visualizer'
+    url: 'http://nerevu.github.io/4w-visualizer/'
+    data: 'https://data.hdx.rwlabs.org/organization/la-nina-consortium'
+    source: 'https://github.com/nerevu/4w-visualizer'
     id: 'com.3w.global-shelter-cluster'
     type: 'webapp'
     version: '0.1.0'
