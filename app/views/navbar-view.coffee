@@ -13,15 +13,15 @@ module.exports = class NavbarView extends View
   initialize: (options) ->
     super
     utils.log 'initializing navbar view'
-    @delegate 'click', @collapseNav
+    @delegate 'click', '#xs-nav-reset', @clearFilters
 
   render: ->
     super
     utils.log 'rendering navbar view'
 
-  collapseNav: (e) ->
-    if e.target.href? and e.currentTarget.parentElement.id is 'navbar'
-      $('.navbar-collapse').collapse('hide')
+  clearFilters: ->
+    dc.filterAll()
+    dc.redrawAll()
 
   getTemplateData: =>
     utils.log 'get navbar view template data'

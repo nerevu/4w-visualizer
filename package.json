@@ -1,8 +1,8 @@
 {
   "author": "Reuben Cummings",
-  "name": "3w",
-  "description": "Stand-a-lone 3w",
-  "version": "0.3.0",
+  "name": "4w-visualizer",
+  "description": "Who is Doing What Where and When",
+  "version": "0.4.0",
   "environment": "web",
   "homepage": "",
   "keywords": [

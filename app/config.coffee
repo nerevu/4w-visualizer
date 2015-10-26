@@ -1,22 +1,25 @@
-site_name = 'Nepal Shelter Cluster 3W'
+site_name = 'La Niña Consortium 4W'
 
 config =
-  whoField: 'Implementing agency'
-  whatField: 'Action description'
-  whereField: 'District HLCIT Code'
-  joinAttribute: 'HLCIT_CODE'
-  nameAttribute: 'DISTRICT'
-  colorScheme: 'Blues'
+  whoField: 'Agency'
+  whatField: 'Project Title'
+  whereField: 'County'
+  joinAttribute: 'COUNTY_NAM'
+  nameAttribute: 'COUNTY_NAM'
+  colorScheme: 'Oranges'
 
   author:
     name: 'Reuben Cummings'
+    handle: 'reubano'
     url: 'https://reubano.github.io'
     email: 'reubano@gmail.com'
 
   site:
     title: site_name
-    description: 'Who is Doing What Where in the Nepal Shelter Cluster'
-    url: 'https://data.hdx.rwlabs.org/organization/global-shelter-cluster'
+    description: 'Emergency Interventions by La Niña Consortium'
+    sub_description: 'Who is Doing What Where and When'
+    url: 'https://data.hdx.rwlabs.org/organization/la-nina-consortium'
+    source: 'https://github.com/reubano/4w-visualizer'
     id: 'com.3w.global-shelter-cluster'
     type: 'webapp'
     version: '0.1.0'

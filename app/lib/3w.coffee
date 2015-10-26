@@ -1,3 +1,5 @@
+mediator = require 'mediator'
+
 module.exports = class ThreeW
   constructor: (options) ->
     # required
@@ -12,6 +14,7 @@ module.exports = class ThreeW
     @whatSelector = selection + '-what'
     @whereSelector = selection + '-where'
     @countSelector = selection + '-count'
+    @sliderSelector = selection + '-slider'
     @whoField = options.whoField or 'Organization'
     @whatField = options.whatField or 'Activity'
     @whereField = options.whereField or 'Location'
@@ -21,7 +24,7 @@ module.exports = class ThreeW
     @height = options.height or 350
     @colors = colorbrewer[colorScheme][numColors]
 
-  calcProjection: (projection, width, height) =>
+  calcProjection: (projection, width) =>
     # http://stackoverflow.com/a/14691788/408556
     path = d3.geo.path().projection(projection)
     b = path.bounds(@geom)
@@ -29,12 +32,12 @@ module.exports = class ThreeW
     bwidth = Math.abs(b[1][0] - b[0][0] )
     s = .9 / Math.max(bwidth / width, bheight / @height)
     t0 = (width - s * (b[1][0] + b[0][0])) / 2
-    t1 = (height - s * (b[1][1] + b[0][1])) / 2
+    t1 = (@height - s * (b[1][1] + b[0][1])) / 2
 
     result =
       scale: s
       width: (width - s * (b[1][0] + b[0][0])) / 2
-      height: (height - s * (b[1][1] + b[0][1])) / 2
+      height: (@height - s * (b[1][1] + b[0][1])) / 2
 
     result
 
@@ -42,7 +45,7 @@ module.exports = class ThreeW
     keys = (f.properties[@joiner] for f in @geom.features)
     values = (f.properties[@namer] for f in @geom.features)
     lookup = _.object keys, values
-    margins = top: 0, left: 5, right: 10, bottom: 35
+    margins = top: 0, left: 10, right: 10, bottom: 35
     add = (p, v) -> v.size
     remove = (p, v) -> v.size
     init = -> 0
@@ -57,6 +60,10 @@ module.exports = class ThreeW
     whoDimension = cf.dimension (d) => d[@whoField]
     whatDimension = cf.dimension (d) => d[@whatField]
     whereDimension = cf.dimension (d) => d[@whereField]
+    @startDimension = cf.dimension (d) -> new Date d['Start']
+    @endDimension = cf.dimension (d) -> new Date d['End']
+    @firstDate = new Date @startDimension.bottom(1)[0].Start
+    @lastDate = new Date @endDimension.top(1)[0].End
 
     whoGroup = whoDimension.group()
     whatGroup = whatDimension.group()
@@ -73,7 +80,7 @@ module.exports = class ThreeW
       .height(@height)
       .margins(margins)
       .elasticX(true)
-      .data((group) => group.top(@top))
+      .data((dimension) => dimension.top(@top))
       .labelOffsetY(13)
       .colors([@colors[1]])
       .colorAccessor((d, i) -> 0)
@@ -87,7 +94,7 @@ module.exports = class ThreeW
       .height(@height)
       .margins(margins)
       .elasticX(true)
-      .data((group) => group.top(@top))
+      .data((dimension) => dimension.top(@top))
       .labelOffsetY(13)
       .colors([@colors[1]])
       .colorAccessor((d, i) -> 0)
@@ -95,9 +102,10 @@ module.exports = class ThreeW
       .ticks(5)
 
     projection = d3.geo.mercator().scale(1).translate([0, 0])
-    r = @calcProjection projection, whereWidth, @height
+    r = @calcProjection projection, whereWidth
     @projection = projection.scale(r.scale).translate([r.width, r.height])
 
+    # TODO: fix filter display https://dc-js.github.io/dc.js/vc/index.html
     @whereChart
       .dimension(whereDimension)
       .projection(@projection)
@@ -105,8 +113,9 @@ module.exports = class ThreeW
       .colors(@colors)
       .colorDomain(d3.extent(_.pluck(whereGroup.all(), 'value')))
       .colorCalculator((d) => if d then @whereChart.colors()(d) else '#ccc')
-      .overlayGeoJson(@geom.features, 'District', (d) => d.properties[@joiner])
-      .title((d) ->"District: #{lookup[d.key]}\nActivities: #{d.value or 0}")
+      .overlayGeoJson(@geom.features, 'County', (d) =>
+        d.properties[@joiner] or '')
+      .title((d) ->"County: #{lookup[d.key]}\nActivities: #{d.value or 0}")
 
     # @countChart
     #   .group({value: -> whereGroup.size()})
@@ -118,7 +127,6 @@ module.exports = class ThreeW
     #     none:'zero districts')
 
     dc.renderAll()
-
     g = d3.selectAll(@whoSelector).select('svg').append('g')
 
     g.append('text')
@@ -142,7 +150,7 @@ module.exports = class ThreeW
     @whatChart.width $(@whatSelector).width()
     dc.redrawAll()
 
-    r = @calcProjection @projection, $(@whereSelector).width(), @height
+    r = @calcProjection @projection, $(@whereSelector).width()
     scale = r.scale
     translate = "#{r.width}, #{r.height}"
 
@@ -151,11 +159,62 @@ module.exports = class ThreeW
       .duration(750)
       .attr("transform", "scale(#{scale})translate(#{translate})")
 
-  slider: ->
-    # https://github.com/MasterMaps/d3-slider
-    # http://tipstrategies.com/geography-of-jobs/
-    # https://github.com/rgdonohue/d3-animated-world/blob/master/js/main.js
-    s = d3.slider().axis(true).min(2000).max(2100).step(5)
+  updateCharts: (value) =>
+    dc.filterAll()
+    m = moment(@baseDate).add('days', value)
+    @endDimension.filterRange([m.toDate(), Infinity])
+    @startDimension.filterRange([@baseDate, (m.add('d', 1)).toDate()])
+    dc.redrawAll()
 
-    s.on 'slide', (e, value) ->
-      d3.select('#slider3text').text(value)
+  updateValue: (e, value) =>
+    m = moment(@baseDate).add('days', value)
+    e.textContent = m.format("l")
+    @value = value
+
+  initSlider: =>
+    # tipstrategies.com/geography-of-jobs/
+    # github.com/rgdonohue/d3-animated-world/blob/master/js/main.js
+    @paused = false
+    @baseDate = new Date '1/1/1970'
+    @min = moment(@firstDate).diff(@baseDate, 'days')
+    @max = moment(@lastDate).diff(@baseDate, 'days')
+    @$element = $('.slider')
+
+    now = moment new Date()
+    start = now.diff(@baseDate, 'days')
+    count = $('.slider').length
+    $value = $('#value')[0]
+
+    updateValue = @updateValue
+    updateCharts = @updateCharts
+
+    @$element[0].setAttribute('min', @min)
+    @$element[0].setAttribute('max', @max)
+    @$element[0].setAttribute('value', start)
+
+    @$element.rangeslider(
+      polyfill: false
+      onInit: ->
+        updateValue $value, @value
+        updateCharts @value
+      onSlide: (pos, value) ->
+        if @grabPos
+          updateValue $value, value
+      onSlideEnd: (pos, value) => @updateCharts value
+    )
+
+  play: (value) =>
+    if (value <= @max) and not @paused
+      @$element.val(value).change()
+      @updateCharts value
+      setTimeout (=> @play(value + 14)), 1000
+    else if @paused
+      @paused = false
+    else if value > @max
+      mediator.publish 'done'
+
+  pause: => @paused = true
+
+  reset: =>
+    @$element.val(@min).change()
+    @updateCharts @min

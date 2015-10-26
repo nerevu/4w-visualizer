@@ -5,6 +5,6 @@ mediator.setUrl = (url) ->
   mediator.url = url
 
 mediator.setSynced = (response) ->
-  console.log "data synced!!"
+  console.log 'data synced!!'
   mediator.synced = true
-  mediator.publish "synced", response
+  mediator.publish 'synced', response
