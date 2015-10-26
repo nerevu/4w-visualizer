@@ -162,8 +162,8 @@ module.exports = class ThreeW
   updateCharts: (value) =>
     dc.filterAll()
     m = moment(@baseDate).add('days', value)
-    @startDimension.filterRange([@baseDate, (m.add('d', 1)).toDate()])
     @endDimension.filterRange([m.toDate(), Infinity])
+    @startDimension.filterRange([@baseDate, (m.add('d', 1)).toDate()])
     dc.redrawAll()
 
   updateValue: (e, value) =>
@@ -175,7 +175,7 @@ module.exports = class ThreeW
     # tipstrategies.com/geography-of-jobs/
     # github.com/rgdonohue/d3-animated-world/blob/master/js/main.js
     @paused = false
-    @baseDate = moment new Date '1/1/1970'
+    @baseDate = new Date '1/1/1970'
     @min = moment(@firstDate).diff(@baseDate, 'days')
     @max = moment(@lastDate).diff(@baseDate, 'days')
     @$element = $('.slider')
