@@ -1,6 +1,7 @@
 SiteView = require 'views/site-view'
-FooterView = require 'views/footer-view'
 NavbarView = require 'views/navbar-view'
+IntroView = require 'views/intro-view'
+FooterView = require 'views/footer-view'
 config= require 'config'
 mediator = require 'mediator'
 
@@ -12,8 +13,9 @@ module.exports = class Controller extends Chaplin.Controller
   # You may also persist models etc.
   beforeAction: ->
     @reuse 'site', SiteView
-    @reuse 'footer', FooterView
     @reuse 'navbar', NavbarView
+    @reuse 'intro', IntroView
+    @reuse 'footer', FooterView
 
     author = config.author
     description = config.description

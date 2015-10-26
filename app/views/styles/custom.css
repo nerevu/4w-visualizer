@@ -1,6 +1,6 @@
 /* Site CSS */
 body {
-  padding-top: 70px;
+  padding-top: 50px;
   overflow-x: hidden !important;
 }
 /*#page-title {margin-bottom: 20px;}*/
@@ -17,6 +17,7 @@ h1 {border-bottom: 2px solid #eee;}
 }
 
 .no-clear {clear: none !important;}
+#navbar {margin-bottom: 0;}
 .navbar-nav.navbar-right:last-child {margin-right: 15px;}
 .numeric {text-align: right;}
 .nounderline {text-decoration: none !important;}
