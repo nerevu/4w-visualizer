@@ -1,15 +1,13 @@
 svg {position: relative;}
 
-#three-w-visualization-wrapper .grid-line {
-  stroke: lightgrey;
-  opacity: 0.5;
-}
-
 body {
   color: #888888;
   font-family: 'Source Sans Pro', sans-serif;
 }
 
+#three-w-visualization-wrapper .grid-line {
+  stroke: lightgrey;
+  opacity: 0.5;
 }
 
 #three-w-visualization-wrapper .dc-chart g.row text {
