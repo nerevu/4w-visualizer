@@ -127,13 +127,13 @@ html, body, body #container {height: 100%;}
   height: 40px;
 }
 
-#site-footer p {margin: 10px 0;}
 
 /* Carousel */
 .carousel-control, .carousel .item {
   background: none !important;
   color: #ffffff !important;
 }
+#site-footer ul {margin: 10px 0;}
 
 /* Other */
 .active-nav {color: #555555 !important;}
