@@ -31,8 +31,6 @@ module.exports = class ThreeW
     bwidth = Math.abs(b[1][0] - b[0][0])
     bheight = Math.abs(b[1][1] - b[0][1])
     s = .9 / Math.max(bwidth / width, bheight / @height)
-    t0 = (width - s * (b[1][0] + b[0][0])) / 2
-    t1 = (@height - s * (b[1][1] + b[0][1])) / 2
 
     result =
       scale: s
