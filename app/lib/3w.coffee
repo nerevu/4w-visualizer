@@ -40,7 +40,7 @@ module.exports = class ThreeW
     result
 
   drawCharts: =>
-    keys = (f.properties[@joiner] for f in @geom.features)
+    keys = ((f.properties[@joiner] or '').toLowerCase() for f in @geom.features)
     values = (f.properties[@namer] for f in @geom.features)
     lookup = _.object keys, values
     margins = top: 0, left: 10, right: 10, bottom: 35
@@ -57,11 +57,11 @@ module.exports = class ThreeW
 
     whoDimension = cf.dimension (d) => d[@whoField]
     whatDimension = cf.dimension (d) => d[@whatField]
-    whereDimension = cf.dimension (d) => d[@whereField]
     @startDimension = cf.dimension (d) -> new Date d['Start']
     @endDimension = cf.dimension (d) -> new Date d['End']
     @firstDate = new Date @startDimension.bottom(1)[0].Start
     @lastDate = new Date @endDimension.top(1)[0].End
+    whereDimension = cf.dimension (d) => d[@whereField].toLowerCase()
 
     whoGroup = whoDimension.group()
     whatGroup = whatDimension.group()
@@ -112,7 +112,7 @@ module.exports = class ThreeW
       .colorDomain(d3.extent(_.pluck(whereGroup.all(), 'value')))
       .colorCalculator((d) => if d then @whereChart.colors()(d) else '#ccc')
       .overlayGeoJson(@geom.features, 'County', (d) =>
-        d.properties[@joiner] or '')
+        (d.properties[@joiner] or '').toLowerCase())
       .title((d) ->"County: #{lookup[d.key]}\nActivities: #{d.value or 0}")
 
     # @countChart
