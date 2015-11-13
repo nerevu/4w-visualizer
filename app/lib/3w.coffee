@@ -18,6 +18,8 @@ module.exports = class ThreeW
     @whoField = options.whoField or 'Organization'
     @whatField = options.whatField or 'Activity'
     @whereField = options.whereField or 'Location'
+    @startField = options.startField or 'Start Date'
+    @endField = options.endField or 'End Date'
     @joiner = options.joinAttribute or 'Location'
     @namer = options.nameAttribute or 'Name'
     @top = options.top or 10
@@ -26,13 +28,11 @@ module.exports = class ThreeW
 
   calcProjection: (projection, width) =>
     # http://stackoverflow.com/a/14691788/408556
-    path = d3.geo.path().projection(projection)
-    b = path.bounds(@geom)
-    bheight = Math.abs(b[1][1]  - b[0][1])
-    bwidth = Math.abs(b[1][0] - b[0][0] )
+    path = d3.geo.path().projection projection
+    b = path.bounds @geom
+    bwidth = Math.abs(b[1][0] - b[0][0])
+    bheight = Math.abs(b[1][1] - b[0][1])
     s = .9 / Math.max(bwidth / width, bheight / @height)
-    t0 = (width - s * (b[1][0] + b[0][0])) / 2
-    t1 = (@height - s * (b[1][1] + b[0][1])) / 2
 
     result =
       scale: s
@@ -42,7 +42,7 @@ module.exports = class ThreeW
     result
 
   drawCharts: =>
-    keys = (f.properties[@joiner] for f in @geom.features)
+    keys = ((f.properties[@joiner] or '').toLowerCase() for f in @geom.features)
     values = (f.properties[@namer] for f in @geom.features)
     lookup = _.object keys, values
     margins = top: 0, left: 10, right: 10, bottom: 35
@@ -59,11 +59,11 @@ module.exports = class ThreeW
 
     whoDimension = cf.dimension (d) => d[@whoField]
     whatDimension = cf.dimension (d) => d[@whatField]
-    whereDimension = cf.dimension (d) => d[@whereField]
-    @startDimension = cf.dimension (d) -> new Date d['Start']
-    @endDimension = cf.dimension (d) -> new Date d['End']
-    @firstDate = new Date @startDimension.bottom(1)[0].Start
-    @lastDate = new Date @endDimension.top(1)[0].End
+    whereDimension = cf.dimension (d) => d[@whereField].toLowerCase()
+    @startDimension = cf.dimension (d) => new Date d[@startField]
+    @endDimension = cf.dimension (d) => new Date d[@endField]
+    @firstDate = new Date @startDimension.bottom(1)[0][@startField]
+    @lastDate = new Date @endDimension.top(1)[0][@endField]
 
     whoGroup = whoDimension.group()
     whatGroup = whatDimension.group()
@@ -114,7 +114,7 @@ module.exports = class ThreeW
       .colorDomain(d3.extent(_.pluck(whereGroup.all(), 'value')))
       .colorCalculator((d) => if d then @whereChart.colors()(d) else '#ccc')
       .overlayGeoJson(@geom.features, 'County', (d) =>
-        d.properties[@joiner] or '')
+        (d.properties[@joiner] or '').toLowerCase())
       .title((d) ->"County: #{lookup[d.key]}\nActivities: #{d.value or 0}")
 
     # @countChart
