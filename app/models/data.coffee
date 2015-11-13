@@ -5,7 +5,7 @@ config = require 'config'
 
 module.exports = class Data extends Collection
   model: Model
-  type: '3w'
+  type: '4w'
   file: true
   local: false
   remote: false

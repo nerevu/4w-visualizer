@@ -18,6 +18,8 @@ module.exports = class ThreeW
     @whoField = options.whoField or 'Organization'
     @whatField = options.whatField or 'Activity'
     @whereField = options.whereField or 'Location'
+    @startField = options.startField or 'Start Date'
+    @endField = options.endField or 'End Date'
     @joiner = options.joinAttribute or 'Location'
     @namer = options.nameAttribute or 'Name'
     @top = options.top or 10
@@ -57,11 +59,11 @@ module.exports = class ThreeW
 
     whoDimension = cf.dimension (d) => d[@whoField]
     whatDimension = cf.dimension (d) => d[@whatField]
-    @startDimension = cf.dimension (d) -> new Date d['Start']
-    @endDimension = cf.dimension (d) -> new Date d['End']
-    @firstDate = new Date @startDimension.bottom(1)[0].Start
-    @lastDate = new Date @endDimension.top(1)[0].End
     whereDimension = cf.dimension (d) => d[@whereField].toLowerCase()
+    @startDimension = cf.dimension (d) => new Date d[@startField]
+    @endDimension = cf.dimension (d) => new Date d[@endField]
+    @firstDate = new Date @startDimension.bottom(1)[0][@startField]
+    @lastDate = new Date @endDimension.top(1)[0][@endField]
 
     whoGroup = whoDimension.group()
     whatGroup = whatDimension.group()
