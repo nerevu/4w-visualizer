@@ -28,8 +28,8 @@ module.exports = class ThreeW
 
   calcProjection: (projection, width) =>
     # http://stackoverflow.com/a/14691788/408556
-    path = d3.geo.path().projection(projection)
-    b = path.bounds(@geom)
+    path = d3.geo.path().projection projection
+    b = path.bounds @geom
     bwidth = Math.abs(b[1][0] - b[0][0])
     bheight = Math.abs(b[1][1] - b[0][1])
     s = .9 / Math.max(bwidth / width, bheight / @height)
