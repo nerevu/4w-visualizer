@@ -22,6 +22,7 @@ module.exports = class ThreeW
     @endField = options.endField or 'End Date'
     @joiner = options.joinAttribute or 'Location'
     @namer = options.nameAttribute or 'Name'
+    @format = options.dateFormat or 'l'
     @top = options.top or 10
     @height = options.height or 350
     @colors = colorbrewer[colorScheme][numColors]
@@ -168,7 +169,7 @@ module.exports = class ThreeW
 
   updateValue: (e, value) =>
     m = moment(@baseDate).add('days', value)
-    e.textContent = m.format("l")
+    e.textContent = m.format @format
     @value = value
 
   initSlider: =>
