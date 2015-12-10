@@ -48,7 +48,7 @@ module.exports = class ThreeW
     keys = ((f.properties[@joiner] or '').toLowerCase() for f in @geom.features)
     values = (f.properties[@namer] for f in @geom.features)
     lookup = _.object keys, values
-    margins = top: 0, left: 10, right: 10, bottom: 35
+    margin = top: 0, bottom: 35, left: 10, right: 10
     add = (p, v) -> v.size
     remove = (p, v) -> v.size
     init = -> 0
@@ -81,7 +81,7 @@ module.exports = class ThreeW
       .group(whoGroup)
       .width(whoWidth)
       .height(@height)
-      .margins(margins)
+      .margins(margin)
       .elasticX(true)
       .data((dimension) => dimension.top(@top))
       .labelOffsetY(13)
@@ -95,7 +95,7 @@ module.exports = class ThreeW
       .group(whatGroup)
       .width(whatWidth)
       .height(@height)
-      .margins(margins)
+      .margins(margin)
       .elasticX(true)
       .data((dimension) => dimension.top(@top))
       .labelOffsetY(13)
