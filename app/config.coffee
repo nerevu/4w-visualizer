@@ -9,6 +9,7 @@ config =
   joinAttribute: 'COUNTY_NAM'
   nameAttribute: 'COUNTY_NAM'
   colorScheme: 'Oranges'
+  dateFormat: 'DD/MM/YYYY'
 
   author:
     name: 'Reuben Cummings'
