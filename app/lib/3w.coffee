@@ -26,6 +26,8 @@ module.exports = class ThreeW
     @top = options.top or 10
     @height = options.height or 350
     @colors = colorbrewer[colorScheme][numColors]
+    @whenStepSize = 14
+    @whenTimeout = 1000
 
   calcProjection: (projection, width) =>
     # http://stackoverflow.com/a/14691788/408556
@@ -208,7 +210,7 @@ module.exports = class ThreeW
     if (value <= @max) and not @paused
       @$element.val(value).change()
       @updateCharts value
-      setTimeout (=> @play(value + 14)), 1000
+      setTimeout (=> @play(value + @whenStepSize)), @whenTimeout
     else if @paused
       @paused = false
     else if value > @max
