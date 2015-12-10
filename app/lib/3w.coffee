@@ -13,8 +13,9 @@ module.exports = class ThreeW
     @whoSelector = selection + '-who'
     @whatSelector = selection + '-what'
     @whereSelector = selection + '-where'
+    @whenSelector = selection + '-slider-axis'
     @countSelector = selection + '-count'
-    @sliderSelector = selection + '-slider'
+    @sliderSelector = '#js-rangeslider-0'
     @whoField = options.whoField or 'Organization'
     @whatField = options.whatField or 'Activity'
     @whereField = options.whereField or 'Location'
@@ -67,10 +68,12 @@ module.exports = class ThreeW
     @endDimension = cf.dimension (d) => new Date d[@endField]
     @firstDate = new Date @startDimension.bottom(1)[0][@startField]
     @lastDate = new Date @endDimension.top(1)[0][@endField]
+    @dateExtent = [@firstDate, @lastDate]
 
     whoGroup = whoDimension.group()
     whatGroup = whatDimension.group()
     whereGroup = whereDimension.group()
+    @whenGroup = @startDimension.group()
 
     whoWidth = $(@whoSelector).width()
     whatWidth = $(@whatSelector).width()
@@ -148,10 +151,55 @@ module.exports = class ThreeW
       .attr('y', @height)
       .text('# of Activities')
 
+  drawAxis: =>
+    # http://bl.ocks.org/mbostock/4149176
+    dateFormat = d3.time.format.multi([
+      ["%b", (d) -> d.getMonth()]
+      ["%Y", -> true]
+    ])
+
+    whenWidth = $(@sliderSelector).width()
+    whenHeight = 50
+    margin = top: 0, bottom: whenHeight * 1.3, left: 15, right: 15
+    axisWidth = whenWidth - margin.left - margin.right
+    @axisHeight = whenHeight - margin.top - margin.bottom
+
+    @xScale = d3.time.scale()
+      .domain(@dateExtent)
+      .range([0, axisWidth])
+
+    @xAxis = d3.svg.axis()
+      .scale(@xScale)
+      .outerTickSize(0)
+      .ticks(Math.max(whenWidth / 100, 2))
+      .tickFormat(dateFormat)
+      # .orient("bottom")
+
+    @whenAxis = d3.select(@whenSelector)
+      .attr('width', whenWidth)
+      .attr('height', whenHeight)
+      .append('g')
+      .attr('transform', "translate(#{margin.left}, #{margin.right})")
+
+    @whenAxis.append('g')
+      .attr('class', 'x axis')
+      .attr('transform', "translate(0, #{@axisHeight})")
+      .call(@xAxis)
+
   resizeCharts: =>
     @whoChart.width $(@whoSelector).width()
     @whatChart.width $(@whatSelector).width()
     dc.redrawAll()
+
+    width = @$slider.width()
+    pos = width * @percent - 20
+    @$fill[0].setAttribute('style', "width: #{pos}px")
+    @$handle[0].setAttribute('style', "left: #{pos - 20}px")
+    @xAxis.ticks(Math.max(width / 100, 2))
+    @xScale.range([0, width])
+    @whenAxis.select('.x.axis')
+      .attr('transform', "translate(0, #{@axisHeight})")
+      .call(@xAxis)
 
     r = @calcProjection @projection, $(@whereSelector).width()
     scale = r.scale
@@ -174,6 +222,15 @@ module.exports = class ThreeW
     e.textContent = m.format @format
     @value = value
 
+  updatePercent: =>
+    @$slider = $('#three-w-slider')
+    @$fill = $('.rangeslider__fill')
+    @$handle = $('.rangeslider__handle')
+
+    width = @$slider.width()
+    pos = parseInt(@$fill[0].style.width[..-3])
+    @percent = (pos + 20) / width
+
   initSlider: =>
     # tipstrategies.com/geography-of-jobs/
     # github.com/rgdonohue/d3-animated-world/blob/master/js/main.js
@@ -190,6 +247,8 @@ module.exports = class ThreeW
 
     updateValue = @updateValue
     updateCharts = @updateCharts
+    drawAxis = @drawAxis
+    updatePercent = @updatePercent
 
     @$element[0].setAttribute('min', @min)
     @$element[0].setAttribute('max', @max)
@@ -200,10 +259,14 @@ module.exports = class ThreeW
       onInit: ->
         updateValue $value, @value
         updateCharts @value
+        updatePercent()
+        drawAxis()
       onSlide: (pos, value) ->
         if @grabPos
           updateValue $value, value
-      onSlideEnd: (pos, value) => @updateCharts value
+      onSlideEnd: (pos, value) =>
+        @updateCharts value
+        @updatePercent()
     )
 
   play: (value) =>
