@@ -118,7 +118,7 @@ module.exports = class ThreeW
       .colorCalculator((d) => if d then @whereChart.colors()(d) else '#ccc')
       .overlayGeoJson(@geom.features, 'County', (d) =>
         (d.properties[@joiner] or '').toLowerCase())
-      .title((d) ->"County: #{lookup[d.key]}\nActivities: #{d.value or 0}")
+      .title((d) -> "County: #{lookup[d.key]}\nActivities: #{d.value or 0}")
 
     # @countChart
     #   .group({value: -> whereGroup.size()})
