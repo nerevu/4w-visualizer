@@ -7,6 +7,8 @@ exports.config =
         indentation:
           value: 2
           level: "error"
+    cachebust:
+      manifest: 'public/cachebust-manifest.json'
 
   files:
     javascripts:
