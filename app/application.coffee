@@ -12,7 +12,6 @@ module.exports = class Application extends Chaplin.Application
     # You can fetch some data here and start app by calling `super` after that.
     mediator.collection.fetch()
     mediator.geometry.fetch()
-    utils.ga()
     super
 
   # Create additional mediator properties.
