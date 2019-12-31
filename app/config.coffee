@@ -12,19 +12,19 @@ config =
   dateFormat: 'DD/MM/YYYY'
 
   author:
-    name: 'Reuben Cummings'
-    handle: 'reubano'
-    url: 'https://reubano.github.io'
+    name: 'Nerevu Group, LLC'
+    handle: 'nerevu'
+    url: '//www.nerevu.com'
     email: 'reubano@gmail.com'
 
   site:
     title: site_name
     description: 'Emergency Interventions by La Niña Consortium'
     sub_description: 'Who is Doing What Where and When'
-    url: 'http://nerevu.github.io/4w-visualizer/'
-    data: 'https://data.hdx.rwlabs.org/organization/la-nina-consortium'
-    source: 'https://github.com/nerevu/4w-visualizer'
-    id: 'com.3w.global-shelter-cluster'
+    url: '//showcase.nerevu.com/4w-visualizer/'
+    data: '//github.com/nerevu/4w-visualizer/tree/master/app/data'
+    source: '//github.com/nerevu/4w-visualizer'
+    id: 'com.4w.red-cross-el-nino'
     type: 'webapp'
     version: '0.1.0'
     keywords: """
