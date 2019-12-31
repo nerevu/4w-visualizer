@@ -8,7 +8,7 @@ utils = require 'lib/utils'
 module.exports = class Application extends Chaplin.Application
   title: config.site.title
 
-  start: =>
+  start: ->
     # You can fetch some data here and start app by calling `super` after that.
     mediator.collection.fetch()
     mediator.geometry.fetch()
