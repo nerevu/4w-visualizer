@@ -1,6 +1,7 @@
 {
   "author": "Reuben Cummings",
   "name": "4w-visualizer",
+  "license": "MIT",
   "description": "Who is Doing What Where and When",
   "version": "0.6.0",
   "environment": "web",
