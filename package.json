@@ -25,7 +25,10 @@
   },
   "scripts": {
     "start": "brunch watch --server",
-    "postinstall": "bower install && brunch build"
+    "build": "bower install && brunch build || echo 'error building project'",
+    "build:prod": "brunch build --production || echo 'error building project'",
+    "heroku-postbuild": "npm run build:prod",
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "auto-reload-brunch": "^2.7.1",
